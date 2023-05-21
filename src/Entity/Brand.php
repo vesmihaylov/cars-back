@@ -14,7 +14,7 @@ use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: BrandRepository::class)]
 #[ORM\Table(name: 'brands')]
-#[ApiResource]
+#[ApiResource(paginationEnabled: false)]
 #[GetCollection(normalizationContext: ['groups' => ['brands:read']])]
 class Brand
 {

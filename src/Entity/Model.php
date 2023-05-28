@@ -14,7 +14,7 @@ use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: ModelRepository::class)]
 #[ORM\Table(name: 'brand_models')]
-#[ApiResource(paginationEnabled: false)]
+#[ApiResource(order: ['name' => 'ASC'], paginationEnabled: false)]
 #[GetCollection(normalizationContext: ['groups' => ['models:read']])]
 #[ApiFilter(SearchFilter::class, properties: ['brand' => 'exact'])]
 class Model

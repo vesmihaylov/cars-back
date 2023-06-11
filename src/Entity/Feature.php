@@ -13,7 +13,7 @@ use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: FeatureRepository::class)]
 #[ORM\Table(name: 'features')]
-#[ApiResource]
+#[ApiResource(paginationEnabled: false)]
 #[GetCollection(normalizationContext: ['groups' => ['features:read']])]
 class Feature
 {

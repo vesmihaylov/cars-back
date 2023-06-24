@@ -6,10 +6,10 @@ namespace App\Enum;
 
 enum FuelType: string
 {
-    case PETROL = "Бензин";
-    case DIESEL = "Дизел";
-    case GAS_AND_PETROL = "Газ/Бензин";
-    case METHANE_AND_PETROL = "Метан/Бензин";
-    case HYBRID = "Хибрид";
-    case ELECTRIC = "Електричество";
+    case PETROL = "PETROL";
+    case DIESEL = "DIESEL";
+    case GAS_AND_PETROL = "GAS_AND_PETROL";
+    case METHANE_AND_PETROL = "METHANE_AND_PETROL";
+    case HYBRID = "HYBRID";
+    case ELECTRIC = "ELECTRIC";
 }

@@ -6,10 +6,12 @@ namespace App\Service;
 
 use App\Dto\PublishDealRequest;
 use App\Entity\{
+    Brand,
     City,
     Deal,
     DealFeature,
-    Feature
+    Feature,
+    Model
 };
 use App\Enum\{
     ConditionType,
@@ -37,6 +39,9 @@ class DealService
         try {
             $deal = new Deal();
             $city = $this->entityManager->getRepository(City::class)->find($data->cityId);
+            $brand = $this->entityManager->getRepository(Brand::class)->find($data->brandId);
+            $model = $this->entityManager->getRepository(Model::class)->find($data->modelId);
+
             if ($data->features) {
                 foreach ($data->features as $featureId) {
                     $feature = $this->entityManager->getRepository(Feature::class)->find($featureId);
@@ -47,8 +52,14 @@ class DealService
                 }
             }
 
+            $title = sprintf('%s %s', $brand->getName(), $model->getName());
+
+            if ($data->additionalTitle) {
+                $title .= sprintf(' %s', $data->additionalTitle);
+            }
+
             $deal
-                ->setTitle($data->title)
+                ->setTitle($title)
                 ->setYear($data->year)
                 ->setTransmissionType(TransmissionType::from($data->transmissionType))
                 ->setWheelType(WheelType::from($data->wheelType))

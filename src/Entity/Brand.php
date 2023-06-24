@@ -32,9 +32,13 @@ class Brand
     #[ORM\OneToMany(mappedBy: 'brand', targetEntity: Model::class, orphanRemoval: true)]
     private Collection $models;
 
+    #[ORM\OneToMany(mappedBy: 'brand', targetEntity: Deal::class)]
+    private Collection $deals;
+
     public function __construct()
     {
         $this->models = new ArrayCollection();
+        $this->deals = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -78,6 +82,36 @@ class Brand
             // set the owning side to null (unless already changed)
             if ($model->getBrand() === $this) {
                 $model->setBrand(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Deal>
+     */
+    public function getDeals(): Collection
+    {
+        return $this->deals;
+    }
+
+    public function addDeal(Deal $deal): self
+    {
+        if (!$this->deals->contains($deal)) {
+            $this->deals->add($deal);
+            $deal->setBrand($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDeal(Deal $deal): self
+    {
+        if ($this->deals->removeElement($deal)) {
+            // set the owning side to null (unless already changed)
+            if ($deal->getBrand() === $this) {
+                $deal->setBrand(null);
             }
         }
 

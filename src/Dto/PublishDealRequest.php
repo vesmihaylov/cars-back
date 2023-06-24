@@ -21,10 +21,10 @@ class PublishDealRequest
     public string $title;
 
     #[Assert\Type('string')]
-    public string $additionalTitle;
+    public string|null $additionalTitle = null;
 
     #[Assert\Type('string')]
-    public string $description;
+    public string|null $description = null;
 
     #[Assert\Uuid]
     public Uuid $brandId;
@@ -51,7 +51,7 @@ class PublishDealRequest
     public string $fuelType;
 
     #[Assert\Type('array')]
-    public array $features;
+    public array $features = [];
 
     #[Assert\Type('integer')]
     public int $horsePower;

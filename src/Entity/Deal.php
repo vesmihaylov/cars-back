@@ -93,6 +93,14 @@ class Deal
     #[ORM\JoinColumn(nullable: false)]
     private ?City $city = null;
 
+    #[ORM\ManyToOne(inversedBy: 'deals')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Brand $brand = null;
+
+    #[ORM\ManyToOne(inversedBy: 'deals')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Model $model = null;
+
     public function getId(): ?Uuid
     {
         return $this->id;
@@ -279,6 +287,30 @@ class Deal
     public function setCity(?City $city): self
     {
         $this->city = $city;
+
+        return $this;
+    }
+
+    public function getBrand(): ?Brand
+    {
+        return $this->brand;
+    }
+
+    public function setBrand(?Brand $brand): self
+    {
+        $this->brand = $brand;
+
+        return $this;
+    }
+
+    public function getModel(): ?Model
+    {
+        return $this->model;
+    }
+
+    public function setModel(?Model $model): self
+    {
+        $this->model = $model;
 
         return $this;
     }

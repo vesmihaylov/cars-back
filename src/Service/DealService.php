@@ -79,7 +79,7 @@ class DealService
             $this->entityManager->persist($deal);
             $this->entityManager->flush();
 
-            return new JsonResponse(['message' => 'Успешно добавена обява.'], Response::HTTP_OK);
+            return new JsonResponse(['message' => 'Успешно добавена обява.'], Response::HTTP_CREATED);
         } catch (Exception $e) {
             return new JsonResponse(['message' => 'Нещо се обърка, свържете се с нас при проблем.'], Response::HTTP_BAD_REQUEST);
         }

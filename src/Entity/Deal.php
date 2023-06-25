@@ -27,6 +27,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
+use ApiPlatform\OpenApi\Model\{
+    Operation,
+    RequestBody
+};
 
 #[ORM\Entity(repositoryClass: DealRepository::class)]
 #[ORM\Table(name: 'deals')]
@@ -36,6 +40,65 @@ use Symfony\Component\Uid\Uuid;
     new Post(
         uriTemplate: '/deals',
         controller: CreateDeal::class,
+        openapi: new Operation(
+            responses: [
+                '201' => [
+                    'description' => 'Успешно добавена обява.'
+                ],
+                '400' => [
+                    'description' => 'Нещо се обърка, свържете се с нас при проблем.'
+                ]
+            ],
+            summary: 'Publish a deal',
+            description: 'Publish a new car deal.',
+            requestBody: new RequestBody(
+                content: new \ArrayObject([
+                    'application/json' => [
+                        'schema' => [
+                            'type' => 'object',
+                            'properties' => [
+                                'additionalTitle' => ['type' => 'string'],
+                                'description' => ['type' => 'string'],
+                                'brandId' => ['type' => 'uuid'],
+                                'cityId' => ['type' => 'uuid'],
+                                'conditionType' => ['type' => 'string'],
+                                'coupeType' => ['type' => 'string'],
+                                'fuelType' => ['type' => 'string'],
+                                'transmissionType' => ['type' => 'string'],
+                                'wheelType' => ['type' => 'string'],
+                                'price' => ['type' => 'integer'],
+                                'year' => ['type' => 'integer'],
+                                'mileage' => ['type' => 'integer'],
+                                'horsePower' => ['type' => 'integer'],
+                                'features' => ['type' => 'array']
+                            ]
+                        ],
+                        'example' => [
+                            'additionalTitle' => 'FACELIFT, обслужена',
+                            'description' => 'Нормални забележки за годините си, обслужена, винетка до грая на годината.',
+                            'brandId' => '6ecff723-18ad-4665-933a-b8a230c0f4d1',
+                            'modelId' => '2f791100-b9ae-4f20-831b-02937854601e',
+                            'cityId' => 'ce22b891-fe3a-4d3d-a5cd-199c94a42d77',
+                            'conditionType' => 'USED',
+                            'coupeType' => 'SEDAN',
+                            'fuelType' => 'DIESEL',
+                            'transmissionType' => 'MANUAL',
+                            'wheelType' => 'LEFT',
+                            'price' => 13500,
+                            'year' => 2007,
+                            'mileage' => 250455,
+                            'horsePower' => 170,
+                            'features' => [
+                                '1d17faa6-41d9-4728-ae36-e0c140719dbf',
+                                '784117c3-2abe-428d-ae93-2370b0dd6248',
+                                '7d110dc3-7110-4455-b253-060b20fd4664'
+                            ]
+                        ]
+                    ]
+                ])
+            )
+
+        ),
         read: false,
         deserialize: false,
         name: 'deal_publish'

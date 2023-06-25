@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
-use App\Enum\ConditionType;
-use App\Enum\CoupeType;
-use App\Enum\FuelType;
-use App\Enum\TransmissionType;
-use App\Enum\WheelType;
+use App\Enum\{
+    ConditionType,
+    CoupeType,
+    FuelType,
+    TransmissionType,
+    WheelType
+};
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -35,7 +37,7 @@ class PublishDealRequest
     #[Assert\Uuid]
     public Uuid $cityId;
 
-    #[Assert\Choice(callback: 'getConditionTypes')]
+    #[Assert\Type(type: ConditionType::class)]
     public string $conditionType;
 
     #[Assert\Type(type: CoupeType::class)]
@@ -64,9 +66,4 @@ class PublishDealRequest
 
     #[Assert\Type('integer')]
     public int $mileage;
-
-    public static function getConditionTypes(): array
-    {
-        return array_column(ConditionType::cases(), 'name');
-    }
 }

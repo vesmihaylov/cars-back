@@ -60,6 +60,8 @@ class DealService
 
             $deal
                 ->setTitle($title)
+                ->setBrand($brand)
+                ->setModel($model)
                 ->setYear($data->year)
                 ->setTransmissionType(TransmissionType::from($data->transmissionType))
                 ->setWheelType(WheelType::from($data->wheelType))

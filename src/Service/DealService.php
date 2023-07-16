@@ -27,10 +27,14 @@ use Symfony\Component\HttpFoundation\{
     JsonResponse,
     Response
 };
+use Psr\Log\LoggerInterface;
 
 class DealService
 {
-    public function __construct(readonly private EntityManagerInterface $entityManager)
+    public function __construct(
+        readonly private EntityManagerInterface $entityManager,
+        readonly private LoggerInterface        $logger
+    )
     {
     }
 
@@ -81,6 +85,7 @@ class DealService
 
             return new JsonResponse(['message' => 'Успешно добавена обява.'], Response::HTTP_CREATED);
         } catch (Exception $e) {
+            $this->logger->error($e->getMessage(), [$e->getTraceAsString()]);
             return new JsonResponse(['message' => 'Нещо се обърка, свържете се с нас при проблем.'], Response::HTTP_BAD_REQUEST);
         }
     }

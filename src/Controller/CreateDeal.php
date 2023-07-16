@@ -22,7 +22,10 @@ class CreateDeal extends AbstractController
 
     public function __invoke(Request $request): JsonResponse
     {
-        $dto = $this->serializer->deserialize($request->getContent(), PublishDealRequest::class, 'json');
+        $normalizedResponse = $this->serializer->decode($request->getContent(), 'json');
+        $encodedData = json_encode($normalizedResponse['data']);
+        $dto = $this->serializer->deserialize($encodedData, PublishDealRequest::class, 'json');
+
         return $this->dealService->publish($dto);
     }
 }

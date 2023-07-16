@@ -11,8 +11,10 @@ use App\Enum\{
     TransmissionType,
     WheelType
 };
-use Symfony\Component\Uid\Uuid;
-use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\{
+    Validator\Constraints as Assert,
+    Uid\Uuid
+};
 
 /**
  * Publish Deal Request DTO
@@ -20,21 +22,18 @@ use Symfony\Component\Validator\Constraints as Assert;
 class PublishDealRequest
 {
     #[Assert\Type('string')]
-    public string $title;
-
-    #[Assert\Type('string')]
     public string|null $additionalTitle = null;
 
     #[Assert\Type('string')]
-    public string|null $description = null;
+    public string|null $description;
 
-    #[Assert\Uuid]
+    #[Assert\Uuid(message: 'Невалиден формат или празна стойност.')]
     public Uuid $brandId;
 
-    #[Assert\Uuid]
+    #[Assert\Uuid(message: 'Невалиден формат или празна стойност.')]
     public Uuid $modelId;
 
-    #[Assert\Uuid]
+    #[Assert\Uuid(message: 'Невалиден формат или празна стойност.')]
     public Uuid $cityId;
 
     #[Assert\Type(type: ConditionType::class)]

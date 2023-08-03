@@ -26,6 +26,10 @@ use Doctrine\Common\Collections\{
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Serializer\Annotation\{
+    Groups,
+    SerializedName
+};
 use Symfony\Component\Uid\Uuid;
 use ApiPlatform\OpenApi\Model\{
     Operation,
@@ -36,7 +40,7 @@ use ApiPlatform\OpenApi\Model\{
 #[ORM\Table(name: 'deals')]
 #[ApiResource(operations: [
     new Get(),
-    new GetCollection(),
+    new GetCollection(normalizationContext: ['groups' => ['deals:read']]),
     new Post(
         uriTemplate: '/deals',
         controller: CreateDeal::class,
@@ -114,18 +118,22 @@ class Deal
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    #[Groups(['deals:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['deals:read'])]
     private ?string $title = null;
 
     #[ORM\Column]
+    #[Groups(['deals:read'])]
     private ?int $price = null;
 
     #[ORM\Column]
     private ?int $year = null;
 
     #[ORM\Column(type: 'string', enumType: FuelType::class)]
+    #[Groups(['deals:read'])]
     private FuelType $fuelType;
 
     #[ORM\Column(type: 'string', enumType: TransmissionType::class)]
@@ -141,6 +149,7 @@ class Deal
     private CoupeType $coupeType;
 
     #[ORM\Column]
+    #[Groups(['deals:read'])]
     private ?int $mileage = null;
 
     #[ORM\Column]
@@ -154,6 +163,7 @@ class Deal
 
     #[ORM\ManyToOne(inversedBy: 'deals')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['deals:read'])]
     private ?City $city = null;
 
     #[ORM\ManyToOne(inversedBy: 'deals')]
@@ -163,6 +173,13 @@ class Deal
     #[ORM\ManyToOne(inversedBy: 'deals')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Model $model = null;
+
+    #[Groups(['deals:read'])]
+    #[SerializedName('createdAt')]
+    public function getCreatedAtTimestampable(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
 
     public function getId(): ?Uuid
     {

@@ -2,14 +2,18 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\{
+    ApiResource,
+    GetCollection
+};
 use App\Enum\FeatureType;
 use App\Repository\FeatureRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Uid\Uuid;
+use Symfony\Component\{
+    Serializer\Annotation\Groups,
+    Uid\Uuid
+};
 
 #[ORM\Entity(repositoryClass: FeatureRepository::class)]
 #[ORM\Table(name: 'features')]
@@ -21,15 +25,15 @@ class Feature
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    #[Groups(['features:read'])]
+    #[Groups(['features:read', 'deal:read'])]
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['features:read'])]
+    #[Groups(['features:read', 'deal:read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: 'string', length: 30, enumType: FeatureType::class)]
-    #[Groups(['features:read'])]
+    #[Groups(['features:read', 'deal:read'])]
     private FeatureType $type;
 
     public function getId(): ?Uuid

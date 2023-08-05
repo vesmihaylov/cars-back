@@ -2,13 +2,18 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\DealFeatureRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
-use Symfony\Component\Uid\Uuid;
+use Symfony\Component\{
+    Serializer\Annotation\Groups,
+    Uid\Uuid
+};
 
 #[ORM\Entity(repositoryClass: DealFeatureRepository::class)]
 #[ORM\Table(name: 'deal_features')]
+#[ApiResource]
 class DealFeature
 {
     #[ORM\Id]
@@ -23,6 +28,7 @@ class DealFeature
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['deal:read'])]
     private ?Feature $feature = null;
 
     public function getId(): ?Uuid

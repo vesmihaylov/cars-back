@@ -26,7 +26,7 @@ class City
     private ?Uuid $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['cities:read', 'deals:read'])]
+    #[Groups(['cities:read', 'deals:read', 'deal:read'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'city', targetEntity: Deal::class)]

@@ -171,7 +171,7 @@ class Deal
 
     #[ORM\ManyToOne(inversedBy: 'deals')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['deals:read', 'deal:read'])]
+    #[Groups(['deals:read'])]
     private ?City $city = null;
 
     #[ORM\ManyToOne(inversedBy: 'deals')]
@@ -401,5 +401,12 @@ class Deal
         $this->model = $model;
 
         return $this;
+    }
+
+    #[SerializedName('city')]
+    #[Groups(['deal:read'])]
+    public function getCityName(): ?string
+    {
+        return $this->city?->getName();
     }
 }

@@ -6,11 +6,13 @@ namespace App\Controller;
 
 use App\Dto\PublishDealRequest;
 use App\Service\DealService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Attribute\AsController;
-use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\{
+    Bundle\FrameworkBundle\Controller\AbstractController,
+    Component\HttpFoundation\JsonResponse,
+    Component\HttpFoundation\Request,
+    Component\HttpKernel\Attribute\AsController,
+    Component\Serializer\SerializerInterface
+};
 
 #[AsController]
 class CreateDeal extends AbstractController

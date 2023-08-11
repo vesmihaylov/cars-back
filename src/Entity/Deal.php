@@ -182,6 +182,11 @@ class Deal
     #[ORM\JoinColumn(nullable: false)]
     private ?Model $model = null;
 
+    #[ORM\ManyToOne(inversedBy: 'deals')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['deal:read'])]
+    private ?User $owner = null;
+
     #[Groups(['deals:read', 'deal:read'])]
     #[SerializedName('createdAt')]
     public function getCreatedAtTimestampable(): ?\DateTimeInterface
@@ -408,5 +413,17 @@ class Deal
     public function getCityName(): ?string
     {
         return $this->city?->getName();
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
+
+        return $this;
     }
 }

@@ -13,7 +13,7 @@ use Symfony\Component\{
 
 #[ORM\Entity(repositoryClass: DealFeatureRepository::class)]
 #[ORM\Table(name: 'deal_features')]
-#[ApiResource]
+#[ApiResource(openapi: false)]
 class DealFeature
 {
     #[ORM\Id]

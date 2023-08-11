@@ -8,7 +8,7 @@ use ApiPlatform\{
     OpenApi\Model\Operation,
     OpenApi\Model\RequestBody
 };
-use App\Controller\CreateUser;
+use App\Controller\RegisterUser;
 use App\Repository\UserRepository;
 use Doctrine\{
     Common\Collections\ArrayCollection,
@@ -33,8 +33,8 @@ use Symfony\Component\{Security\Core\User\PasswordAuthenticatedUserInterface,
 #[ApiResource(
     operations: [
         new Post(
-            uriTemplate: '/users',
-            controller: CreateUser::class,
+            uriTemplate: '/register',
+            controller: RegisterUser::class,
             openapi: new Operation(
                 responses: [
                     '201' => [
@@ -44,7 +44,7 @@ use Symfony\Component\{Security\Core\User\PasswordAuthenticatedUserInterface,
                         'description' => 'Нещо се обърка, свържете се с нас при проблем.'
                     ]
                 ],
-                summary: 'Create an user',
+                summary: 'Register user',
                 description: 'Register a new user.',
                 requestBody: new RequestBody(
                     content: new \ArrayObject([
@@ -56,6 +56,7 @@ use Symfony\Component\{Security\Core\User\PasswordAuthenticatedUserInterface,
                                     'email' => ['type' => 'string'],
                                     'phoneNumber' => ['type' => 'string'],
                                     'password' => ['type' => 'string'],
+                                    'type' => ['type' => 'string'],
                                 ]
                             ],
                             'example' => [
@@ -63,6 +64,7 @@ use Symfony\Component\{Security\Core\User\PasswordAuthenticatedUserInterface,
                                 'email' => 'jdoe@gmail.com',
                                 'phoneNumber' => '359111111111',
                                 'password' => 'strongPassword',
+                                'type' => 'SELLER',
                             ]
                         ]
                     ])
@@ -71,7 +73,7 @@ use Symfony\Component\{Security\Core\User\PasswordAuthenticatedUserInterface,
             ),
             read: false,
             deserialize: false,
-            name: 'user_create'
+            name: 'user_register'
         ),
     ],
     normalizationContext: ['groups' => ['user:read']],

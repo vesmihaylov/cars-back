@@ -21,7 +21,7 @@ use Symfony\{
 };
 
 #[AsController]
-class CreateUser extends AbstractController
+class RegisterUser extends AbstractController
 {
     public function __construct(
         private readonly UserRepository              $userRepository,

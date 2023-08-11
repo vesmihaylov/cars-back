@@ -103,12 +103,13 @@ use ApiPlatform\OpenApi\Model\{
             )
 
         ),
+        security: "is_granted('ROLE_SELLER') or is_granted('ROLE_COMPANY')",
         read: false,
         deserialize: false,
         name: 'deal_publish'
     ),
-    new Delete(),
-    new Put()
+    new Delete(security: "is_granted('ROLE_SELLER') or is_granted('ROLE_COMPANY')"),
+    new Put(security: "is_granted('ROLE_SELLER') or is_granted('ROLE_COMPANY')")
 ])]
 class Deal
 {

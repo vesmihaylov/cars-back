@@ -81,6 +81,7 @@ use Symfony\Component\{Security\Core\User\PasswordAuthenticatedUserInterface,
 )]
 #[UniqueEntity(fields: ['email'], message: 'Тази електронна поща вече съществува.')]
 #[UniqueEntity(fields: ['name'], message: 'Това име вече съществува.')]
+#[UniqueEntity(fields: ['phoneNumber'], message: 'Вече има профил със този телефонен номер.')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use TimestampableEntity;

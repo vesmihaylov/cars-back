@@ -36,6 +36,12 @@ class CreateUserRequest
     public string $type;
 
     #[Assert\NotBlank(message: 'Моля, въведете телефонен номер.')]
+    #[Assert\Length(
+        min: 10,
+        max: 15,
+        minMessage: 'Минималният брой символи на тел.номер е 10.',
+        maxMessage: 'Позволеният брой символи на тел.номер е 15.'
+    )]
     #[Assert\Regex(
         '/^\\+?\\d{1,4}?[-.\\s]?\\(?\\d{1,3}?\\)?[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,4}[-.\\s]?\\d{1,9}$/',
         message: 'Телефонният номер не е валиден.'

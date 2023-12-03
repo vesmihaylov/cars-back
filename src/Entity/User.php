@@ -8,7 +8,10 @@ use ApiPlatform\{
     OpenApi\Model\Operation,
     OpenApi\Model\RequestBody
 };
-use App\Controller\RegisterUser;
+use App\Controller\{
+    RegisterUser,
+    ChangeUserInfo
+};
 use App\Repository\UserRepository;
 use Doctrine\{
     Common\Collections\ArrayCollection,
@@ -75,9 +78,54 @@ use Symfony\Component\{Security\Core\User\PasswordAuthenticatedUserInterface,
             deserialize: false,
             name: 'user_register'
         ),
+        new Post(
+            uriTemplate: '/user/change-info',
+            controller: ChangeUserInfo::class,
+            openapi: new Operation(
+                responses: [
+                    '201' => [
+                        'description' => 'Успешна промяна.'
+                    ],
+                    '400' => [
+                        'description' => 'Нещо се обърка, свържете се с нас при проблем.'
+                    ],
+                    '404' => [
+                        'description' => 'Потребителят не беше намерен.'
+                    ],
+
+                ],
+                summary: 'Change user information',
+                description: 'Change user information such as email address or name.',
+                requestBody: new RequestBody(
+                    content: new \ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'id' => ['type' => 'string'],
+                                    'name' => ['type' => 'string'],
+                                    'email' => ['type' => 'string'],
+                                    'phoneNumber' => ['type' => 'string'],
+                                ]
+                            ],
+                            'example' => [
+                                'id' => '0189e428-e4d7-78f2-bae3-2b7fb598a212',
+                                'name' => 'John Doe',
+                                'email' => 'jdoe@gmail.com',
+                                'phoneNumber' => '359000000000',
+                            ]
+                        ]
+                    ])
+                )
+
+            ),
+            read: false,
+            deserialize: false,
+            name: 'user_change_info'
+        ),
     ],
     normalizationContext: ['groups' => ['user:read']],
-    denormalizationContext: ['groups' => ['user:write']]
+    denormalizationContext: ['groups' => ['user:update']]
 )]
 #[UniqueEntity(fields: ['email'], message: 'Тази електронна поща вече съществува.')]
 #[UniqueEntity(fields: ['name'], message: 'Това име вече съществува.')]
@@ -96,7 +144,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\NotBlank]
     #[Assert\Email]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['user:read', 'user:write', 'user:update'])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -112,7 +160,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['user:read', 'user:write', 'user:update'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]

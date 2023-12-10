@@ -8,10 +8,7 @@ use ApiPlatform\{
     OpenApi\Model\Operation,
     OpenApi\Model\RequestBody
 };
-use App\Controller\{
-    RegisterUser,
-    ChangeUserInfo
-};
+use App\Controller\{ChangeUserPassword, RegisterUser, ChangeUserInfo};
 use App\Repository\UserRepository;
 use Doctrine\{
     Common\Collections\ArrayCollection,
@@ -122,6 +119,51 @@ use Symfony\Component\{Security\Core\User\PasswordAuthenticatedUserInterface,
             read: false,
             deserialize: false,
             name: 'user_change_info'
+        ),
+        new Post(
+            uriTemplate: '/user/change-password',
+            controller: ChangeUserPassword::class,
+            openapi: new Operation(
+                responses: [
+                    '201' => [
+                        'description' => 'Успешна промяна.'
+                    ],
+                    '400' => [
+                        'description' => 'Нещо се обърка, свържете се с нас при проблем.'
+                    ],
+                    '404' => [
+                        'description' => 'Потребителят не беше намерен.'
+                    ],
+
+                ],
+                summary: 'Change user password',
+                description: 'Change user password with a new one.',
+                requestBody: new RequestBody(
+                    content: new \ArrayObject([
+                        'application/json' => [
+                            'schema' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'id' => ['type' => 'string'],
+                                    'newPassword' => ['type' => 'string'],
+                                    'repeatNewPassword' => ['type' => 'string'],
+                                    'oldPassword' => ['type' => 'string'],
+                                ]
+                            ],
+                            'example' => [
+                                'id' => '0189e428-e4d7-78f2-bae3-2b7fb598a212',
+                                'newPassword' => 'the new password',
+                                'repeatNewPassword' => 'the new password',
+                                'oldPassword' => 'the old password',
+                            ]
+                        ]
+                    ])
+                )
+
+            ),
+            read: false,
+            deserialize: false,
+            name: 'user_change_password'
         ),
     ],
     normalizationContext: ['groups' => ['user:read']],

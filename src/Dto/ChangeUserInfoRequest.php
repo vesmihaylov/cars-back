@@ -12,6 +12,9 @@ use Symfony\Component\Validator\Constraints\Email;
  */
 class ChangeUserInfoRequest
 {
+    #[Assert\NotBlank(message: 'ID на потребител не е подадено.')]
+    public string $userId;
+
     #[Assert\NotBlank(message: 'Моля, въведете вашето име.')]
     #[Assert\Length(
         min: 3,

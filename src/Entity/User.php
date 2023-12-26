@@ -8,7 +8,11 @@ use ApiPlatform\{
     OpenApi\Model\Operation,
     OpenApi\Model\RequestBody
 };
-use App\Controller\{ChangeUserPassword, RegisterUser, ChangeUserInfo};
+use App\Controller\{
+    ChangeUserPassword,
+    RegisterUser,
+    ChangeUserInfo
+};
 use App\Repository\UserRepository;
 use Doctrine\{
     Common\Collections\ArrayCollection,
@@ -222,9 +226,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:read'])]
     private ?string $phoneNumber = null;
 
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: FavouriteDeal::class, orphanRemoval: true)]
+    private Collection $favouriteDeals;
+
     public function __construct()
     {
         $this->deals = new ArrayCollection();
+        $this->favouriteDeals = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -385,6 +393,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPhoneNumber(string $phoneNumber): self
     {
         $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FavouriteDeal>
+     */
+    public function getFavouriteDeals(): Collection
+    {
+        return $this->favouriteDeals;
+    }
+
+    public function addFavouriteDeal(FavouriteDeal $favouriteDeal): self
+    {
+        if (!$this->favouriteDeals->contains($favouriteDeal)) {
+            $this->favouriteDeals->add($favouriteDeal);
+            $favouriteDeal->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavouriteDeal(FavouriteDeal $favouriteDeal): self
+    {
+        if ($this->favouriteDeals->removeElement($favouriteDeal)) {
+            // set the owning side to null (unless already changed)
+            if ($favouriteDeal->getOwner() === $this) {
+                $favouriteDeal->setOwner(null);
+            }
+        }
 
         return $this;
     }

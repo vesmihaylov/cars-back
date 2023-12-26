@@ -188,6 +188,9 @@ class Deal
     #[Groups(['deal:read'])]
     private ?User $owner = null;
 
+    #[ORM\OneToMany(mappedBy: 'deal', targetEntity: FavouriteDeal::class, orphanRemoval: true)]
+    private Collection $favouriteDeals;
+
     #[Groups(['deals:read', 'deal:read'])]
     #[SerializedName('createdAt')]
     public function getCreatedAtTimestampable(): ?\DateTimeInterface
@@ -341,6 +344,7 @@ class Deal
         $this->coupeType = CoupeType::SEDAN;
         $this->conditionType = ConditionType::USED;
         $this->dealFeatures = new ArrayCollection();
+        $this->favouriteDeals = new ArrayCollection();
     }
 
     /**
@@ -424,6 +428,36 @@ class Deal
     public function setOwner(?User $owner): self
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FavouriteDeal>
+     */
+    public function getFavouriteDeals(): Collection
+    {
+        return $this->favouriteDeals;
+    }
+
+    public function addFavouriteDeal(FavouriteDeal $favouriteDeal): self
+    {
+        if (!$this->favouriteDeals->contains($favouriteDeal)) {
+            $this->favouriteDeals->add($favouriteDeal);
+            $favouriteDeal->setDeal($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavouriteDeal(FavouriteDeal $favouriteDeal): self
+    {
+        if ($this->favouriteDeals->removeElement($favouriteDeal)) {
+            // set the owning side to null (unless already changed)
+            if ($favouriteDeal->getDeal() === $this) {
+                $favouriteDeal->setDeal(null);
+            }
+        }
 
         return $this;
     }

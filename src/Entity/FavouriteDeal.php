@@ -5,10 +5,13 @@ namespace App\Entity;
 use ApiPlatform\Metadata\{
     ApiResource,
     Get,
-    Post
+    Post,
+    Delete
 };
 use App\Repository\FavouriteDealRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: FavouriteDealRepository::class)]
 #[ORM\UniqueConstraint(columns: ['deal_id', 'owner_id'])]
@@ -16,15 +19,17 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource(
     operations: [
         new Get(),
-        new Post()
+        new Post(),
+        new Delete(),
     ]
 )]
 class FavouriteDeal
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    private ?Uuid $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'favouriteDeals')]
     #[ORM\JoinColumn(nullable: false)]
@@ -34,7 +39,7 @@ class FavouriteDeal
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
 
-    public function getId(): ?int
+    public function getId(): ?Uuid
     {
         return $this->id;
     }

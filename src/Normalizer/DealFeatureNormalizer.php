@@ -29,4 +29,11 @@ class DealFeatureNormalizer implements NormalizerInterface
 
         return $feature ? $feature->toArray() : [];
     }
+
+    public function getSupportedTypes(?string $format): array
+    {
+        return [
+            DealFeature::class => true,
+        ];
+    }
 }

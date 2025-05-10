@@ -240,30 +240,30 @@ final class Version20240426125724 extends AbstractMigration
     {
         // Populate brands & models for each brand
         foreach (self::BRANDS as $name => $models) {
-            $brandId = Uuid::v4();
+            $brandId = (string) Uuid::v4();
             $this->addSql('INSERT INTO "brands" (id, name) VALUES (:id, :name)', [$brandId, $name]);
             foreach ($models as $model) {
-                $this->addSql('INSERT INTO "brand_models" (id, brand_id, name) VALUES (:id, :brand_id, :name)', [Uuid::v4(), $brandId, $model]);
+                $this->addSql('INSERT INTO "brand_models" (id, brand_id, name) VALUES (:id, :brand_id, :name)', [(string) Uuid::v4(), $brandId, $model]);
             }
         }
 
         // Security features
         foreach (self::SECURITY_FEATURES as $securityFeature) {
-            $this->addSql('INSERT INTO "features" (id, name, type) VALUES (:id, :name, :type)', [Uuid::v4(), $securityFeature, FeatureType::SECURITY->name]);
+            $this->addSql('INSERT INTO "features" (id, name, type) VALUES (:id, :name, :type)', [(string) Uuid::v4(), $securityFeature, FeatureType::SECURITY->name]);
         }
 
         // Comfort features
         foreach (self::COMFORT_FEATURES as $comfortFeature) {
-            $this->addSql('INSERT INTO "features" (id, name, type) VALUES (:id, :name, :type)', [Uuid::v4(), $comfortFeature, FeatureType::COMFORT->name]);
+            $this->addSql('INSERT INTO "features" (id, name, type) VALUES (:id, :name, :type)', [(string) Uuid::v4(), $comfortFeature, FeatureType::COMFORT->name]);
         }
 
         // Other features
         foreach (self::OTHER_FEATURES as $otherFeature) {
-            $this->addSql('INSERT INTO "features" (id, name, type) VALUES (:id, :name, :type)', [Uuid::v4(), $otherFeature, FeatureType::OTHER->name]);
+            $this->addSql('INSERT INTO "features" (id, name, type) VALUES (:id, :name, :type)', [(string) Uuid::v4(), $otherFeature, FeatureType::OTHER->name]);
         }
 
         foreach (self::CITIES as $city) {
-            $this->addSql('INSERT INTO "cities" (id, name) VALUES (:id, :name)', [Uuid::v4(), $city]);
+            $this->addSql('INSERT INTO "cities" (id, name) VALUES (:id, :name)', [(string) Uuid::v4(), $city]);
         }
     }
 
